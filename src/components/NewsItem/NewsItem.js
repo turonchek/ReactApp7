@@ -41,6 +41,7 @@ export function NewsItem(props){
         return hashtagsData.length===0 ? hashtagsDataForm.map(h => h.word).join(', ') : hashtagsData.map(h => h.word).join(', ')
     })
 
+
     return(
         <div className="news-item">
             <h1>{title}</h1>

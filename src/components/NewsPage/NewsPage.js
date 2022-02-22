@@ -14,7 +14,8 @@ export function NewsPage(){
     const [items,setItems] = useState(news);
     const [isEditing,setIsEditing] = useState(false);
     const [isSearch,setIsSearch] = useState(false);
-    const [search,setSearch] = useState({search:``,searchHashtags:[]});
+    const [search,setSearch] = useState(``);
+    const [filters,setFilters] = useState([]);
 
     const addRandomNewsItem =useCallback(()=>{
         setItems([
@@ -30,14 +31,14 @@ export function NewsPage(){
     },[items])
 
     useEffect(()=>{
-        if(search.search===``){
+        if(search ===``){
             setItems(news)
             return
         }
-        const itemsFilter =items.filter(el => {
-            if(el.title.toLowerCase().indexOf(search.search.toLowerCase())<0 
-                && el.text.toLowerCase().indexOf(search.search.toLowerCase())<0 
-                && el.description.toLowerCase().indexOf(search.search.toLowerCase())<0
+        const itemsSearch=items.filter(el => {
+            if(el.title.toLowerCase().indexOf(search.toLowerCase())<0 
+                && el.text.toLowerCase().indexOf(search.toLowerCase())<0 
+                && el.description.toLowerCase().indexOf(search.toLowerCase())<0
                 ) return false;
             // if(el.hashtags.map((id)=>{
             //     search.searchHashtags.map((srchHshtg)=>{
@@ -49,8 +50,47 @@ export function NewsPage(){
             // })) return false;
             return true;
         })
-        setItems(itemsFilter);
+        setItems(itemsSearch);
     },[search,setItems])
+
+
+    useEffect(()=>{
+        if(filters.length===0){
+            setItems(news);
+            return
+        }
+        // const filteredItems=items.filter(function(itemsEl){
+        //     return filters.filter(function(filtersEl){
+        //         // return filtersEl.id=itemsEl.hashtags.id;
+        //         return itemsEl.hashtags.filter(hshtgEl=>hshtgEl.id === filtersEl.id)
+        //     })
+        // });
+        // const filteredItems=items.filter(itemsEl=>{
+        //     // console.log(`itemsElID---------`,itemsEl.hashtags)
+        //     return itemsEl.hashtags.filter(hshtgElID=>{
+        //         console.log(`hshtgElID--------`,hshtgElID)
+        //         return filters.filter(filtersEl=>{
+        //             console.log(`filtersElID------`,filtersEl.id)
+        //         })
+        //     })
+        //     console.log(`---------`)
+            // return filters.filter(filtersEl=>{
+            //     // console.log(`filtersElID-------`,filtersEl.id)
+            //     // filtersEl.filter(el=>console.log(`itemsElID---------`,el.id))
+            // })
+        // })
+
+
+
+
+        // console.log(filters)
+        // const filteredItems=items.filter(el=>console.log(el.hashtags))
+        // const filteredItems=items.filter(el=>!filters.includes(el.hashtags))
+        // setItems(filteredItems);
+        // console.log(filteredItems)
+        // console.log(filters)
+    },[filters,setFilters])
+
 
     return(
         <div className="news-page">
@@ -71,6 +111,8 @@ export function NewsPage(){
             )}
             {(isSearch &&
                 <NewsSearch
+                    filters={filters}
+                    onChangeFilters ={(newFilter)=>setFilters(newFilter)}
                     onChangeSearch={(newSearch)=>setSearch(newSearch)}
                 />
             )}

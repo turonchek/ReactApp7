@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NewsItem } from "../NewsItem/NewsItem";
 
 export function NewsList(props){
-    const {items, onRemoveNewsItem} = props;
+    const {items, onRemoveNewsItem } = props;
     return (
         <div className="news-list">
             <div className="news-list__cont">

@@ -4,23 +4,24 @@ import { HASHTAGS } from "../../data";
 
 export function NewsSearch(props){
     const searchRef=useRef(null);
-    const [searchHashtags,setSearchHashtags] = useState([]);
-
-    const handleChangeSearchHashtags = useCallback((e)=>{
-        const { value, id } = e.currentTarget;
-        let newSearchHashtag;
-        if (searchHashtags.includes(value)) {
-            newSearchHashtag = searchHashtags.filter(el => el !== value);
-        } else {
-            newSearchHashtag = [...searchHashtags, {value,id}];
-        }
-        setSearchHashtags( newSearchHashtag );
-    },[searchHashtags,setSearchHashtags])
 
     const handleChangeSearch = useCallback(()=>{   
         const {onChangeSearch} = props;
-        onChangeSearch({search:searchRef.current.value,searchHashtags});
-    },[searchRef,searchHashtags]);
+        onChangeSearch(searchRef.current.value);
+    },[searchRef]);
+
+    const handleChangeFilters = useCallback((e)=>{   
+        const {onChangeFilters} = props;
+        const { value, id } = e.currentTarget;
+        let newFilter;
+
+        if (props.filters.includes(value)) {
+            newFilter = props.filters.filter(el => el !== value);
+        } else {
+            newFilter = [...props.filters, {value, id}];
+        }
+        onChangeFilters(newFilter);
+    },[props.filters]);
 
     return (
         <div>
@@ -38,10 +39,10 @@ export function NewsSearch(props){
                         <input
                             name={hashtagsEl.word}
                             id={hashtagsEl.id}
-                            // checked={hashtags.indexOf(hashtagsEl.word) !== -1}
+                            // checked={HASHTAGS.indexOf(hashtagsEl.word) !== -1}
                             type="checkbox"
                             value={hashtagsEl.word}
-                            onChange={handleChangeSearchHashtags}
+                            onChange={handleChangeFilters}
                         /><span>{hashtagsEl.word}</span>
                         </label>
                     ))}
